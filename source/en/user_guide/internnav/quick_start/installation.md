@@ -213,14 +213,16 @@ To enable additional functionalities, several install flags are available:
 
 ## Verification
 
-InternNav adopts a **client–server design** to simplify model deployment and prediction. 
+InternNav adopts a client–server architecture to simplify real-world deployment and model inference.
+
+In the setup, the **server**—typically a workstation equipped with a powerful GPU (e.g., RTX 4090), handles computation-intensive tasks such as processing observations received from the client and generating the next action. The **client**—which can be a Unitree H1, G1, quadruped robot, or wheeled platform running ROS 1 or ROS 2—collects observations (e.g., images, sensor data) and transmits them to the server over a local-area-network (LAN) connection via IP and port communication. The server then returns the predicted actions to the client for real-time execution, enabling seamless closed-loop control and scalable multi-robot deployment.
 
 To verify the installation of **InternNav**, start the model server first.
 ```bash
 python scripts/eval/start_server.py --port 8087
 ```
 The output should be:
-```
+```bash
 Starting Agent Server...
 Registering agents...
 INFO:     Started server process [18877]
@@ -263,7 +265,7 @@ agent=AgentCfg(
 agent = AgentClient(cfg.agent)
 ```
 The output should be something like:
-```
+```bash
 Loading navdp model: NavDP_Policy_DPT_CriticSum_DAT
 Pretrained: None
 No pretrained weights provided, initializing randomly.
@@ -272,7 +274,7 @@ INFO:     ::1:38332 - "POST /agent/init HTTP/1.1" 201 Created
 ```
 
 Load a capture frame from RealSense DS455 camera:
-```
+```bash
 from scripts.iros_challenge.onsite_competition.sdk.save_obs import load_obs_from_meta
 rs_meta_path = '/root/InternNav/scripts/iros_challenge/onsite_competition/captures/rs_meta.json'
 
@@ -286,7 +288,7 @@ The output should be:
 ```
 
 Test model inference
-```
+```bash
 action = agent.step([obs])[0]['action'][0]
 print(f"Action taken: {action}")
 ```
